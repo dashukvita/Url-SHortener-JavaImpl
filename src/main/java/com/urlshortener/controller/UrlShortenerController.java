@@ -25,11 +25,11 @@ import java.util.Optional;
         name = "URL Shortener API",
         description = "API for shortening long URLs and retrieving their original versions."
 )
-@RequestMapping(path="/api", produces ={MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(produces ={MediaType.APPLICATION_JSON_VALUE})
 public class UrlShortenerController {
     private final UrlShortener urlShortener;
 
-    @PostMapping("/shorten")
+    @PostMapping("/api/shorten")
     @Operation(summary = "Shorten a URL", description = "Returns a shortened version of the original URL")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "URL shortened successfully"),
@@ -45,7 +45,7 @@ public class UrlShortenerController {
                 .body(new ResponseDto(shortUrl));
     }
 
-    @GetMapping("/retrieve")
+    @GetMapping("/api/retrieve")
     @Operation(summary = "Retrieve original URL", description = "Returns the original URL for a given shortened URL")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Original URL found",
