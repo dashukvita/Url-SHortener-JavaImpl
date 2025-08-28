@@ -18,10 +18,8 @@ class UrlShortenerImplTest {
 
     @BeforeEach
     void setUp() {
-        String domain = "http://short.ly";
         HashStrategy strategy = new UUIDStrategyImpl();
-
-        urlShortener = new UrlShortenerImpl(strategy, domain);
+        urlShortener = new UrlShortenerImpl(strategy);
     }
 
     @Test
