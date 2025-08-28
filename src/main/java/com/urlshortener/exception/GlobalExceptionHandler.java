@@ -3,6 +3,7 @@ package com.urlshortener.exception;
 import com.urlshortener.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -17,12 +18,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDto> handleGenericException(Exception ex){
-        ErrorResponseDto errorResponseDto = new ErrorResponseDto(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                ex.getMessage()
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponseDto> handleMissingParam(MissingServletRequestParameterException ex) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                HttpStatus.BAD_REQUEST,
+                "Required parameter '" + ex.getParameterName() + "' is missing"
         );
-        return new ResponseEntity<>(errorResponseDto, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
