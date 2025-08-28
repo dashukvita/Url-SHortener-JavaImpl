@@ -1,5 +1,7 @@
 package com.urlshortener.controller;
 
+import com.urlshortener.dto.ErrorResponseDto;
+import com.urlshortener.dto.ResponseDto;
 import com.urlshortener.exception.UrlValidationException;
 import com.urlshortener.service.UrlShortener;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,10 +32,11 @@ class UrlShortenerControllerTest {
 
         Mockito.when(mockService.shorten(longUrl)).thenReturn(shortUrl);
 
-        ResponseEntity<String> response = controller.shortenUrl(longUrl);
+        ResponseEntity<ResponseDto> response = controller.shortenUrl(longUrl);
 
-        assertEquals(shortUrl, response.getBody());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(shortUrl, response.getBody().getUrl());
     }
 
     @Test
@@ -43,10 +46,13 @@ class UrlShortenerControllerTest {
 
         Mockito.when(mockService.retrieve(shortUrl)).thenReturn(Optional.of(longUrl));
 
-        ResponseEntity<String> response = controller.retrieveUrl(shortUrl);
+        ResponseEntity<?> response = controller.retrieveUrl(shortUrl);
 
-        assertEquals(longUrl, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+
+        ResponseDto body = (ResponseDto) response.getBody();
+        assertEquals(longUrl, body.getUrl());
     }
 
     @Test
@@ -55,14 +61,18 @@ class UrlShortenerControllerTest {
 
         Mockito.when(mockService.retrieve(shortUrl)).thenReturn(Optional.empty());
 
-        ResponseEntity<String> response = controller.retrieveUrl(shortUrl);
+        ResponseEntity<?> response = controller.retrieveUrl(shortUrl);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody() instanceof ErrorResponseDto);
+
+        ErrorResponseDto body = (ErrorResponseDto) response.getBody();
+        assertEquals("Short URL not found", body.getErrorMessage());
     }
 
     @Test
     void testShortenUrlInvalidValues() {
-        // Настраиваем мок для выброса исключения на некорректные URL
         Mockito.when(mockService.shorten(Mockito.isNull()))
                 .thenThrow(new UrlValidationException("URL is null"));
         Mockito.when(mockService.shorten(""))
@@ -70,13 +80,8 @@ class UrlShortenerControllerTest {
         Mockito.when(mockService.shorten("   "))
                 .thenThrow(new UrlValidationException("URL is blank"));
 
-        // Проверяем null
         assertThrows(UrlValidationException.class, () -> controller.shortenUrl(null));
-
-        // Проверяем пустую строку
         assertThrows(UrlValidationException.class, () -> controller.shortenUrl(""));
-
-        // Проверяем пробелы
         assertThrows(UrlValidationException.class, () -> controller.shortenUrl("   "));
     }
 
