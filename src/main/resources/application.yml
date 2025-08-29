@@ -12,3 +12,17 @@ spring:
     mongodb:
       uri: mongodb://admin:secret@localhost:27017/library?authSource=admin
       # database: library
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,loggers
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.example.urlshortener: DEBUG

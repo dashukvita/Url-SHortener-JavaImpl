@@ -2,15 +2,10 @@ package com.urlshortener.controller.view;
 
 import com.urlshortener.service.UrlShortener;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.view.RedirectView;
 
-import java.net.URI;
 
 @Controller
 @AllArgsConstructor

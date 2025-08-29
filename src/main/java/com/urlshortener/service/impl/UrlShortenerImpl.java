@@ -1,5 +1,6 @@
 package com.urlshortener.service.impl;
 
+import com.urlshortener.aspect.Loggable;
 import com.urlshortener.model.UrlDocument;
 import com.urlshortener.repository.RedisRepository;
 import com.urlshortener.repository.UrlRepository;
@@ -22,6 +23,7 @@ public class UrlShortenerImpl implements UrlShortener {
     private final UrlRepository urlRepository;
 
     @Override
+    @Loggable
     public String shorten(String longUrl) {
         UrlValidation.validate(longUrl);
 
@@ -46,6 +48,7 @@ public class UrlShortenerImpl implements UrlShortener {
     }
 
     @Override
+    @Loggable
     public Optional<String> retrieve(String shortUrl) {
         UrlValidation.validate(shortUrl);
 
