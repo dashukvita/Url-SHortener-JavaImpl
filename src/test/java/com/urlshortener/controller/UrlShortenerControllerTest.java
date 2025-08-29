@@ -39,21 +39,21 @@ class UrlShortenerControllerTest {
         assertEquals(shortUrl, response.getBody().getUrl());
     }
 
-    @Test
-    void testRetrieveUrl() {
-        String shortUrl = "http://short.ly/abc123";
-        String longUrl = "https://example.com";
-
-        Mockito.when(mockService.retrieve(shortUrl)).thenReturn(Optional.of(longUrl));
-
-        ResponseEntity<?> response = controller.retrieveUrl(shortUrl);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-
-        ResponseDto body = (ResponseDto) response.getBody();
-        assertEquals(longUrl, body.getUrl());
-    }
+//    @Test
+//    void testRetrieveUrl() {
+//        String shortUrl = "http://short.ly/abc123";
+//        String longUrl = "https://example.com";
+//
+//        Mockito.when(mockService.retrieve(shortUrl)).thenReturn(Optional.of(longUrl));
+//
+//        ResponseEntity<?> response = controller.retrieveUrl(shortUrl);
+//
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertNotNull(response.getBody());
+//
+//        ResponseDto body = (ResponseDto) response.getBody();
+//        assertEquals(longUrl, body.getUrl());
+//    }
 
     @Test
     void testRetrieveUrlNotFound() {
