@@ -10,4 +10,5 @@ public interface RedisRepository {
 
     boolean existsByShortUrl(String shortUrl);
     void incrementClicks(String shortUrl);
+    Long generateId(String key);
 }

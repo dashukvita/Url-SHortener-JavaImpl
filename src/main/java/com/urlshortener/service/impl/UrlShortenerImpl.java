@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.urlshortener.constants.Constants.DOMAIN;
-import static com.urlshortener.constants.Constants.URL_TTL;
+import static com.urlshortener.constants.Constants.*;
 
 @Service
 @AllArgsConstructor
@@ -32,20 +31,17 @@ public class UrlShortenerImpl implements UrlShortener {
         }
 
         String shortUrl;
-        synchronized (this) {
-            do {
-                shortUrl = strategy.hashUrl(longUrl);
-            } while (redisRepository.existsByShortUrl(shortUrl));
+        do {
+            shortUrl = strategy.hashUrl(longUrl);
+        } while (redisRepository.existsByShortUrl(shortUrl));
 
-            UrlDocument doc = new UrlDocument();
-            doc.setShortUrl(shortUrl);
-            doc.setLongUrl(longUrl);
-            doc.setCreatedAt(Instant.now());
-            doc.setClicks(0);
+        UrlDocument doc = new UrlDocument();
+        doc.setShortUrl(shortUrl);
+        doc.setLongUrl(longUrl);
+        doc.setCreatedAt(Instant.now());
 
-            urlRepository.save(doc);
-            redisRepository.save(shortUrl, longUrl, URL_TTL);
-        }
+        urlRepository.save(doc);
+        redisRepository.save(shortUrl, longUrl, TTL);
         return DOMAIN + shortUrl;
     }
 
@@ -64,7 +60,7 @@ public class UrlShortenerImpl implements UrlShortener {
             UrlDocument doc = urlRepository.findUrlDocumentByShortUrl(key);
             if (doc != null) {
                 longUrl = doc.getLongUrl();
-                redisRepository.save(key, longUrl, URL_TTL);
+                redisRepository.save(key, longUrl, TTL);
             }
         } else {
             redisRepository.incrementClicks(key);

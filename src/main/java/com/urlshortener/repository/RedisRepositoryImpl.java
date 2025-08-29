@@ -26,11 +26,16 @@ public class RedisRepositoryImpl implements RedisRepository{
     }
     @Override
     public boolean existsByShortUrl(String shortUrl) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey("long:" + shortUrl));
+        return Boolean.TRUE.equals(redisTemplate.hasKey(shortUrl));
     }
 
     @Override
     public void incrementClicks(String shortUrl) {
         redisTemplate.opsForValue().increment("clicks:" + shortUrl);
+    }
+
+    @Override
+    public Long generateId(String key) {
+        return redisTemplate.opsForValue().increment(key);
     }
 }

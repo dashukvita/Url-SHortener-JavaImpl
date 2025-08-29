@@ -28,5 +28,4 @@ public class UrlDocument {
     @Field(name = "long-url")
     private String longUrl;
     private Instant createdAt;
-    private Integer clicks;
 }
