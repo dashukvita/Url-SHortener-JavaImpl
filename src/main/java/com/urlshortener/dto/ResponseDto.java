@@ -7,6 +7,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class ResponseDto extends AbstractResponse {
+public class ResponseDto {
     private String url;
 }

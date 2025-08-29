@@ -1,6 +1,5 @@
 package com.urlshortener.controller;
 
-import com.urlshortener.dto.AbstractResponse;
 import com.urlshortener.dto.ErrorResponseDto;
 import com.urlshortener.dto.ResponseDto;
 import com.urlshortener.service.UrlShortener;
@@ -16,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -53,14 +50,14 @@ public class UrlShortenerController {
             @ApiResponse(responseCode = "404", description = "Short URL not found",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    public ResponseEntity<AbstractResponse> retrieveUrl(
+    public ResponseEntity<Object> retrieveUrl(
             @RequestParam("shortUrl")
             @Parameter(description = "Shortened URL", example = "http://short.ly/abc123")
             String shortUrl
     ) {
-        Optional<String> originalUrl = urlShortener.retrieve(shortUrl);
-        return originalUrl.<ResponseEntity<AbstractResponse>>map(s -> ResponseEntity.ok(new ResponseDto(s)))
+        return urlShortener.retrieve(shortUrl)
+                .map(originalUrl -> ResponseEntity.ok((Object) new ResponseDto(originalUrl)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponseDto("Short URL not found")));
+                        .body(new ErrorResponseDto("Short URL not found")));
     }
 }

@@ -7,6 +7,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class ErrorResponseDto extends AbstractResponse{
+public class ErrorResponseDto {
     private  String errorMessage;
 }
