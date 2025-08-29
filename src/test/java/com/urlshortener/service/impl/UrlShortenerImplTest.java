@@ -1,6 +1,7 @@
 package com.urlshortener.service.impl;
 
 import com.urlshortener.repository.RedisRepository;
+import com.urlshortener.repository.UrlRepository;
 import com.urlshortener.service.HashStrategy;
 import com.urlshortener.service.UrlShortener;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,13 +16,15 @@ class UrlShortenerImplTest {
     private UrlShortener urlShortener;
     private HashStrategy strategy;
     private RedisRepository redisRepository;
+    private UrlRepository urlRepository;
 
     @BeforeEach
     void setUp() {
         strategy = mock(HashStrategy.class);
         redisRepository = mock(RedisRepository.class);
+        urlRepository = mock(UrlRepository.class);
 
-        urlShortener = new UrlShortenerImpl(strategy, redisRepository);
+        urlShortener = new UrlShortenerImpl(strategy, redisRepository, urlRepository);
     }
 
     @Test

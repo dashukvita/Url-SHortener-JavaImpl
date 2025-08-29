@@ -9,5 +9,5 @@ public interface RedisRepository {
     String findByLongUrl(String longUrl);
 
     boolean existsByShortUrl(String shortUrl);
-    boolean existsByLongUrl(String longUrl);
+    void incrementClicks(String shortUrl);
 }
