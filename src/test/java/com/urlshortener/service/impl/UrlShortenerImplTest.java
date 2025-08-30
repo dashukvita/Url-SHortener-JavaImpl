@@ -1,8 +1,8 @@
 package com.urlshortener.service.impl;
 
-import com.urlshortener.repository.RedisRepository;
-import com.urlshortener.repository.UrlRepository;
-import com.urlshortener.service.HashStrategy;
+import com.urlshortener.repository.StorageRepository;
+import com.urlshortener.service.UrlShortenerImpl;
+import com.urlshortener.service.hashgenerator.HashGenerator;
 import com.urlshortener.service.UrlShortener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,15 +14,15 @@ import static org.mockito.Mockito.*;
 class UrlShortenerImplTest {
 
     private UrlShortener urlShortener;
-    private HashStrategy strategy;
+    private HashGenerator strategy;
     private RedisRepository redisRepository;
-    private UrlRepository urlRepository;
+    private StorageRepository urlRepository;
 
     @BeforeEach
     void setUp() {
-        strategy = mock(HashStrategy.class);
+        strategy = mock(HashGenerator.class);
         redisRepository = mock(RedisRepository.class);
-        urlRepository = mock(UrlRepository.class);
+        urlRepository = mock(StorageRepository.class);
 
         urlShortener = new UrlShortenerImpl(strategy, redisRepository, urlRepository);
     }
