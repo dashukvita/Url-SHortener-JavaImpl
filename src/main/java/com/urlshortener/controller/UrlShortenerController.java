@@ -52,7 +52,7 @@ public class UrlShortenerController {
     })
     public ResponseEntity<Object> retrieveUrl(
             @RequestParam("shortUrl")
-            @Parameter(description = "Shortened URL", example = "http://short.ly/abc123")
+            @Parameter(description = "Shortened URL", example = "https://short.ly/abc123")
             String shortUrl
     ) {
         return urlShortener.retrieve(shortUrl)

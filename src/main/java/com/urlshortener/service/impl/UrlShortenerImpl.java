@@ -2,8 +2,8 @@ package com.urlshortener.service.impl;
 
 import com.urlshortener.aspect.Loggable;
 import com.urlshortener.model.UrlDocument;
-import com.urlshortener.repository.RedisRepository;
-import com.urlshortener.repository.UrlRepository;
+import com.urlshortener.repository.CacheRepository;
+import com.urlshortener.repository.StorageRepository;
 import com.urlshortener.service.HashStrategy;
 import com.urlshortener.service.UrlShortener;
 import com.urlshortener.validation.UrlValidation;
@@ -19,15 +19,15 @@ import static com.urlshortener.constants.Constants.*;
 @AllArgsConstructor
 public class UrlShortenerImpl implements UrlShortener {
     private final HashStrategy strategy;
-    private final RedisRepository redisRepository;
-    private final UrlRepository urlRepository;
+    private final CacheRepository<String, String> cache;
+    private final StorageRepository storage;
 
     @Override
     @Loggable
     public String shorten(String longUrl) {
         UrlValidation.validate(longUrl);
 
-        String cachedShortUrl = redisRepository.findByLongUrl(longUrl);
+        String cachedShortUrl = String.valueOf(cache.getByValue(longUrl));
         if (cachedShortUrl != null) {
             return DOMAIN + cachedShortUrl;
         }
@@ -35,15 +35,15 @@ public class UrlShortenerImpl implements UrlShortener {
         String shortUrl;
         do {
             shortUrl = strategy.hashUrl(longUrl);
-        } while (redisRepository.existsByShortUrl(shortUrl));
+        } while (cache.contains(shortUrl));
 
         UrlDocument doc = new UrlDocument();
         doc.setShortUrl(shortUrl);
         doc.setLongUrl(longUrl);
         doc.setCreatedAt(Instant.now());
 
-        urlRepository.save(doc);
-        redisRepository.save(shortUrl, longUrl, TTL);
+        storage.save(doc);
+        cache.save(shortUrl, longUrl, TTL);
         return DOMAIN + shortUrl;
     }
 
@@ -57,16 +57,16 @@ public class UrlShortenerImpl implements UrlShortener {
         }
         String key = shortUrl.substring(DOMAIN.length());
 
-        String longUrl = redisRepository.findByShortUrl(key);
+        String longUrl = cache.get(key);
 
         if (longUrl == null) {
-            UrlDocument doc = urlRepository.findUrlDocumentByShortUrl(key);
+            UrlDocument doc = storage.findUrlDocumentByShortUrl(key);
             if (doc != null) {
                 longUrl = doc.getLongUrl();
-                redisRepository.save(key, longUrl, TTL);
+                cache.save(key, longUrl, TTL);
             }
         } else {
-            redisRepository.incrementClicks(key);
+            cache.incrementCounter(key);
         }
         return Optional.ofNullable(longUrl);
     }
