@@ -30,28 +30,21 @@ public class UrlShortenerViewController {
 
     @PostMapping("/shorten")
     @ResponseBody
-    public ResponseEntity<ResponseDto<String>> shortenUrlAjax(@RequestParam String originalUrl) {
+    public String shortenUrlAjax(@RequestParam String originalUrl) {
         if (!UrlValidator.isValidUrl(originalUrl)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseDto.error("Invalid url: " + originalUrl));
+            return "Invalid url: " + originalUrl;
         }
-        String shortUrl = urlShortener.shorten(originalUrl);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseDto.success(shortUrl));
+        return urlShortener.shorten(originalUrl);
     }
 
     @PostMapping("/retrieve")
     @ResponseBody
-    public ResponseEntity<ResponseDto<String>> retrieveUrlAjax(@RequestParam String shortUrl) {
-        if (!shortUrl.startsWith(DOMAIN) || !UrlValidator.isValidUrl(shortUrl)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseDto.error("Invalid url: " + shortUrl));
+    public String retrieveUrlAjax(@RequestParam String shortUrl) {
+        if (!shortUrl.startsWith(DOMAIN)) {
+            return "Invalid url: " + shortUrl;
         }
 
-        Optional<String> originalUrl = urlShortener.retrieve(shortUrl);
-        return originalUrl
-                .map(url -> ResponseEntity.ok(ResponseDto.success(url)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseDto.error("Short URL not found")));
+        return urlShortener.retrieve(shortUrl)
+                .orElse("Short URL not found");
     }
 }

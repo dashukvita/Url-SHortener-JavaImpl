@@ -34,19 +34,19 @@ public class UrlShortenerController {
             @ApiResponse(responseCode = "201", description = "URL shortened successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid URL format")
     })
-    public ResponseEntity<ResponseDto<String>> shortenUrl(
+    public ResponseEntity<ResponseDto> shortenUrl(
             @RequestParam
             @Parameter(description = "Original URL to shorten", example = "https://example.com")
             String originalUrl
     ) {
         if (UrlValidator.isValidUrl(originalUrl)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseDto.error("Invalid url:" + originalUrl));
+                    .body(new ResponseDto("Invalid url:" + originalUrl));
         }
 
         String shortUrl = urlShortener.shorten(originalUrl);
         return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ResponseDto.success(shortUrl));
+                    .body(new ResponseDto(shortUrl));
     }
 
     @GetMapping("/api/retrieve")
@@ -55,20 +55,20 @@ public class UrlShortenerController {
             @ApiResponse(responseCode = "200", description = "Original URL found"),
             @ApiResponse(responseCode = "404", description = "Short URL not found")
     })
-    public ResponseEntity<ResponseDto<String>> retrieveUrl(
+    public ResponseEntity<ResponseDto> retrieveUrl(
             @RequestParam("shortUrl")
             @Parameter(description = "Shortened URL", example = "https://short.ly/abc123")
             String shortUrl
     ) {
         if (!shortUrl.startsWith(DOMAIN) || UrlValidator.isValidUrl(shortUrl)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseDto.error("Invalid url:" + shortUrl));
+                    .body(new ResponseDto("Invalid url:" + shortUrl));
         }
 
         Optional<String> originalUrl = urlShortener.retrieve(shortUrl);
         return originalUrl
-                .map(url -> ResponseEntity.ok(ResponseDto.success(url)))
+                .map(url -> ResponseEntity.ok(new ResponseDto(url)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(ResponseDto.error("Short URL not found")));
+                        .body(new ResponseDto("Short URL not found")));
     }
 }
