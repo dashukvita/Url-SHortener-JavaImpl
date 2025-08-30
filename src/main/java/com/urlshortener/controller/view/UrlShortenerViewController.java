@@ -31,7 +31,7 @@ public class UrlShortenerViewController {
     @PostMapping("/shorten")
     @ResponseBody
     public ResponseEntity<ResponseDto<String>> shortenUrlAjax(@RequestParam String originalUrl) {
-        if (UrlValidator.isValidUrl(originalUrl)) {
+        if (!UrlValidator.isValidUrl(originalUrl)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseDto.error("Invalid url: " + originalUrl));
         }
@@ -43,7 +43,7 @@ public class UrlShortenerViewController {
     @PostMapping("/retrieve")
     @ResponseBody
     public ResponseEntity<ResponseDto<String>> retrieveUrlAjax(@RequestParam String shortUrl) {
-        if (!shortUrl.startsWith(DOMAIN) || UrlValidator.isValidUrl(shortUrl)) {
+        if (!shortUrl.startsWith(DOMAIN) || !UrlValidator.isValidUrl(shortUrl)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseDto.error("Invalid url: " + shortUrl));
         }
