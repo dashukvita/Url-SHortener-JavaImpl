@@ -1,6 +1,6 @@
 package com.urlshortener.service.hashgenerator;
 
-import com.urlshortener.repository.CacheRepository;
+import com.urlshortener.repository.cache.CacheRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

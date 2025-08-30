@@ -2,11 +2,9 @@ package com.urlshortener.service;
 
 import com.urlshortener.aspect.Loggable;
 import com.urlshortener.model.UrlDocument;
-import com.urlshortener.repository.CacheRepository;
+import com.urlshortener.repository.cache.CacheRepository;
 import com.urlshortener.repository.StorageRepository;
 import com.urlshortener.service.hashgenerator.HashGenerator;
-import com.urlshortener.service.UrlShortener;
-import com.urlshortener.validation.UrlValidation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

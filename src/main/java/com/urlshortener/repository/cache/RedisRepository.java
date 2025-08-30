@@ -1,4 +1,4 @@
-package com.urlshortener.repository;
+package com.urlshortener.repository.cache;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -6,14 +6,17 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 
+import static com.urlshortener.constants.Constants.*;
+
 @Repository
 @AllArgsConstructor
 public class RedisRepository implements CacheRepository<String, String> {
+
     private final RedisTemplate<String, String> redisTemplate;
     @Override
     public void save(String key, String value, Duration ttl) {
-        redisTemplate.opsForValue().set("short:" + key, value, ttl);
-        redisTemplate.opsForValue().set("long:" + value, key, ttl);
+        redisTemplate.opsForValue().set(SHORT_KEY_PREFIX + key, value, ttl);
+        redisTemplate.opsForValue().set(LONG_KEY_PREFIX + value, key, ttl);
     }
 
     @Override
@@ -23,7 +26,7 @@ public class RedisRepository implements CacheRepository<String, String> {
 
     @Override
     public String getByValue(String value) {
-        return redisTemplate.opsForValue().get("long:" + value);
+        return redisTemplate.opsForValue().get(LONG_KEY_PREFIX + value);
     }
 
     @Override
@@ -32,12 +35,7 @@ public class RedisRepository implements CacheRepository<String, String> {
     }
 
     @Override
-    public long incrementCounter(String key) {
-        return redisTemplate.opsForValue().increment("clicks:" + key);
-    }
-
-    @Override
-    public long generateId(String key) {
-        return redisTemplate.opsForValue().increment(key);
+    public void incrementCounter(String key) {
+        redisTemplate.opsForValue().increment(CLICK_KEY_PREFIX + key);
     }
 }

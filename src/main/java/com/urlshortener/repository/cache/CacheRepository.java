@@ -1,4 +1,4 @@
-package com.urlshortener.repository;
+package com.urlshortener.repository.cache;
 
 import java.time.Duration;
 
@@ -7,6 +7,5 @@ public interface CacheRepository<K, V> {
     V get(K key);
     K getByValue(V value);
     boolean contains(K key);
-    long incrementCounter(K key);
-    long generateId(String key);
+    void incrementCounter(K key);
 }

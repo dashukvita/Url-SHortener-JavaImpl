@@ -7,6 +7,16 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class ResponseDto {
-    private String url;
+public class ResponseDto<T> {
+    private boolean success;
+    private T data;
+    private String error;
+
+    public static <T> ResponseDto<T> success(T data) {
+        return new ResponseDto<>(true, data, null);
+    }
+
+    public static <T> ResponseDto<T> error(String error) {
+        return new ResponseDto<>(false, null, error);
+    }
 }
