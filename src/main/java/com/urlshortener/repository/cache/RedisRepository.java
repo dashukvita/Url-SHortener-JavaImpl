@@ -33,9 +33,4 @@ public class RedisRepository implements CacheRepository<String, String> {
     public boolean contains(String key) {
         return redisTemplate.hasKey(key);
     }
-
-    @Override
-    public void incrementCounter(String key) {
-        redisTemplate.opsForValue().increment(CLICK_KEY_PREFIX + key);
-    }
 }

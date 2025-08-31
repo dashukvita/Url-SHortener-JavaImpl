@@ -7,5 +7,4 @@ public interface CacheRepository<K, V> {
     V get(K key);
     K getByValue(V value);
     boolean contains(K key);
-    void incrementCounter(K key);
 }

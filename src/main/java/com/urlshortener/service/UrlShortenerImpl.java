@@ -54,8 +54,6 @@ public class UrlShortenerImpl implements UrlShortener {
                 originalUrl = doc.getLongUrl();
                 cacheRepository.save(shortCode, originalUrl, TTL);
             }
-        } else {
-            cacheRepository.incrementCounter(shortCode);
         }
         return Optional.ofNullable(originalUrl);
     }
