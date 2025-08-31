@@ -26,7 +26,7 @@ public class UrlShortenerViewController {
     @PostMapping("/shorten")
     @ResponseBody
     public String shortenUrlAjax(@RequestParam String originalUrl) {
-        if (!UrlValidator.isValidUrl(originalUrl)) {
+        if (UrlValidator.isNotValidUrl(originalUrl)) {
             return "Invalid url: " + originalUrl;
         }
         return urlShortener.shorten(originalUrl);

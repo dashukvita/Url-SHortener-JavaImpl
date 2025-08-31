@@ -20,9 +20,15 @@ public class UrlShortenerImpl implements UrlShortener {
     private final CacheRepository<String, String> cacheRepository;
     private final StorageRepository storageRepository;
 
+    /**
+     * Shortens a long URL.
+     * @param originalUrl original URL
+     * @return shortened URL with domain
+     */
     @Override
     @Loggable
     public String shorten(String originalUrl) {
+        //simple protection from double click
         String cachedShortUrl = cacheRepository.getByValue(originalUrl);
         if (cachedShortUrl != null) {
             return DOMAIN + cachedShortUrl;
@@ -41,6 +47,11 @@ public class UrlShortenerImpl implements UrlShortener {
         return DOMAIN + shortCode;
     }
 
+    /**
+     * Retrieves the original URL from the shortened one.
+     * @param shortUrl shortened URL
+     * @return Optional with the original URL or empty
+     */
     @Override
     @Loggable
     public Optional<String> retrieve(String shortUrl) {

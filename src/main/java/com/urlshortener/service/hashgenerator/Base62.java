@@ -13,9 +13,9 @@ public class Base62 {
         if (num.equals(BigInteger.ZERO)) return "0";
 
         while (num.compareTo(BigInteger.ZERO) > 0) {
-            BigInteger[] divmod = num.divideAndRemainder(BigInteger.valueOf(BASE));
-            sb.append(ALPHABET.charAt(divmod[1].intValue()));
-            num = divmod[0];
+            BigInteger[] divMod = num.divideAndRemainder(BigInteger.valueOf(BASE));
+            sb.append(ALPHABET.charAt(divMod[1].intValue()));
+            num = divMod[0];
         }
 
         return sb.reverse().toString();

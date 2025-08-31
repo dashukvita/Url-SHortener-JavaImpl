@@ -14,7 +14,10 @@ import java.util.Arrays;
 
 import static com.urlshortener.constants.Constants.*;
 
-
+/**
+ * Generates short hash codes for URLs using SHA-256 + Base62 and ensures uniqueness.
+ * Retries with random byte changes up to MAX_ATTEMPTS if collisions occur.
+ */
 @Service
 @AllArgsConstructor
 public class HashGeneratorImpl implements HashGenerator {
@@ -33,7 +36,7 @@ public class HashGeneratorImpl implements HashGenerator {
             String hash = Base62.encode(shortBytes);
             int attempt = 0;
 
-            while (!isHashUnique(hash) && attempt < MAX_ATTEMPTS) {
+            while (isHashExist(hash) && attempt < MAX_ATTEMPTS) {
                 int randomIndex = RANDOM.nextInt(shortBytes.length);
                 shortBytes[randomIndex] = (byte) RANDOM.nextInt(256);
 
@@ -55,9 +58,7 @@ public class HashGeneratorImpl implements HashGenerator {
      * Check if hash is unique:
      * true = unique, false = already exists
      */
-    private boolean isHashUnique(String hash) {
-        if (cache.contains(hash)) return false;
-
-        return storage.findUrlDocumentByShortUrl(hash) == null;
+    private boolean isHashExist(String hash) {
+        return cache.contains(hash) || storage.findUrlDocumentByShortUrl(hash) != null;
     }
 }

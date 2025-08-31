@@ -5,28 +5,28 @@ import java.net.*;
 public class UrlValidator {
     private UrlValidator() {
     }
-    public static boolean isValidUrl(String url) {
-        if (url == null || url.isBlank()) return false;
+    public static boolean isNotValidUrl(String url) {
+        if (url == null || url.isBlank()) return true;
 
         try {
             URI uri = new URI(url.trim());
             String scheme = uri.getScheme();
-            if (!("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) return false;
+            if (!("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) return true;
 
             String host = uri.getHost();
-            if (host == null || host.isBlank()) return false;
+            if (host == null || host.isBlank()) return true;
 
             try {
                 InetAddress address = InetAddress.getByName(host);
                 if (address.isLoopbackAddress() || address.isAnyLocalAddress() || address.isSiteLocalAddress())
-                    return false;
+                    return true;
             } catch (UnknownHostException e) {
-                return false;
+                return true;
             }
 
-            return true;
-        } catch (URISyntaxException e) {
             return false;
+        } catch (URISyntaxException e) {
+            return true;
         }
     }
 }

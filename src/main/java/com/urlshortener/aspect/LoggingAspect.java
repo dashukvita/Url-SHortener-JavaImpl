@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * Aspect to log methods annotated with {@link Loggable}.
+ * Logs method entry, exit with return value, and exceptions.
+ */
 @Slf4j
 @Aspect
 @Component

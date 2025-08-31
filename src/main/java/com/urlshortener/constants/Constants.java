@@ -3,6 +3,10 @@ package com.urlshortener.constants;
 
 import java.time.Duration;
 
+/**
+ * Application constants: shortener domain, cache TTL, hashing parameters.
+ */
+
 public class Constants {
     private Constants(){}
     public static final String DOMAIN = "https://short.ly/";
