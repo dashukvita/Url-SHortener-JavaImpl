@@ -8,6 +8,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Slf4j
 @Aspect
 @Component
@@ -16,7 +18,7 @@ public class LoggingAspect {
     public void logBefore(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().toShortString();
         Object[] args = joinPoint.getArgs();
-        log.info("[ENTER] {} with args {}", methodName, args);
+        log.info("[ENTER] {} with args {}", methodName, Arrays.toString(args));
     }
 
     @AfterReturning(pointcut = "@annotation(com.urlshortener.aspect.Loggable)", returning = "result")
