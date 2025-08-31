@@ -39,7 +39,7 @@ public class UrlShortenerController {
             @Parameter(description = "Original URL to shorten", example = "https://example.com")
             String originalUrl
     ) {
-        if (UrlValidator.isValidUrl(originalUrl)) {
+        if (!UrlValidator.isValidUrl(originalUrl)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ResponseDto("Invalid url:" + originalUrl));
         }
@@ -60,7 +60,7 @@ public class UrlShortenerController {
             @Parameter(description = "Shortened URL", example = "https://short.ly/abc123")
             String shortUrl
     ) {
-        if (!shortUrl.startsWith(DOMAIN) || UrlValidator.isValidUrl(shortUrl)) {
+        if (!shortUrl.startsWith(DOMAIN)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ResponseDto("Invalid url:" + shortUrl));
         }

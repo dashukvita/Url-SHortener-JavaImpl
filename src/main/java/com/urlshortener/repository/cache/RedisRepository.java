@@ -31,6 +31,6 @@ public class RedisRepository implements CacheRepository<String, String> {
 
     @Override
     public boolean contains(String key) {
-        return redisTemplate.hasKey(key);
+        return redisTemplate.hasKey(SHORT_KEY_PREFIX + key);
     }
 }
