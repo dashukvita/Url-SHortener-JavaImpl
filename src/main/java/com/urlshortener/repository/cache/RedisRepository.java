@@ -21,7 +21,7 @@ public class RedisRepository implements CacheRepository<String, String> {
 
     @Override
     public String get(String key) {
-        return redisTemplate.opsForValue().get(key);
+        return redisTemplate.opsForValue().get(SHORT_KEY_PREFIX + key);
     }
 
     @Override

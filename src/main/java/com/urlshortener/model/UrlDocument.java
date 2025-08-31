@@ -21,11 +21,11 @@ public class UrlDocument {
 
     @NotNull
     @NotEmpty
-    @Field(name = "short-url")
+    @Field(name = "shortUrl")
     private String shortUrl;
     @NotNull
     @NotEmpty
-    @Field(name = "long-url")
+    @Field(name = "longUrl")
     private String longUrl;
     private Instant createdAt;
 }
